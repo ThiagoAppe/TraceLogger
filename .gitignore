@@ -1,0 +1,9 @@
+# Ignore specific directories
+venv/
+OLD/
+DevTools/
+
+# In case they appear nested
+**/venv/
+**/OLD/
+**/DevTools/
