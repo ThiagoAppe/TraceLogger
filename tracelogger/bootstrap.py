@@ -9,7 +9,8 @@ from .core.listener import start_listener, stop_listener
 from .core.record_factory import setup_record_factory
 from .handlers.console import create_console_handler
 from .handlers.file import create_file_handler
-from .formatters.simple import SimpleFormatter
+from .formatters.json import JsonFormatter
+
 from .config import (
     log_level,
     log_console,
@@ -63,7 +64,7 @@ def init_logging(
         # Formatters
         # =========================
 
-        formatter = SimpleFormatter()
+        formatter = JsonFormatter()
 
         # =========================
         # Handlers (consumer side)
