@@ -1,9 +1,11 @@
-# Ignore specific directories
+# specific directories
 venv/
 OLD/
 DevTools/
+tracelogger.egg-info/
 
-# In case they appear nested
+# Nested
+**/__pycache__/
 **/venv/
 **/OLD/
 **/DevTools/
