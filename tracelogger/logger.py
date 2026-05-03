@@ -2,8 +2,6 @@ import logging
 from enum import Enum
 from typing import Union
 
-from .config import log_level
-
 
 def _resolve(value: Union[str, Enum]) -> str:
     """
@@ -36,7 +34,5 @@ def get_logger(area: Union[str, Enum], category: Union[str, Enum]) -> logging.Lo
 
     logger_name = f"{area_str}.{category_str}"
     logger = logging.getLogger(logger_name)
-
-    logger.setLevel(int(log_level))
 
     return logger
