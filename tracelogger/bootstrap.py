@@ -6,6 +6,7 @@ from threading import Lock
 
 from .core.queue import init_log_queue, get_log_queue
 from .core.listener import start_listener, stop_listener
+from .core.record_factory import setup_record_factory
 from .handlers.console import create_console_handler
 from .handlers.file import create_file_handler
 from .formatters.simple import SimpleFormatter
@@ -50,6 +51,13 @@ def init_logging(
 
         init_log_queue(use_multiprocessing)
         queue = get_log_queue()
+
+        # =========================
+        # Record factory (context injection)
+        # =========================
+
+        setup_record_factory()
+
 
         # =========================
         # Formatters
