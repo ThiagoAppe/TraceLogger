@@ -2,7 +2,7 @@ import logging
 from logging.handlers import QueueHandler
 from typing import List, Optional
 import atexit
-
+from threading import Lock
 
 from .core.queue import init_log_queue, get_log_queue
 from .core.listener import start_listener, stop_listener
@@ -17,6 +17,7 @@ from .config import (
 
 
 _IsInitialized = False
+_InitLock: Lock = Lock()
 
 
 def init_logging(
@@ -31,61 +32,63 @@ def init_logging(
     if _IsInitialized:
         return
 
-    # =========================
-    # Resolve config
-    # =========================
+    with _InitLock:
+        if _IsInitialized:
+            return
 
-    level = level if level is not None else log_level
-    use_console = use_console if use_console is not None else log_console
-    use_file = use_file if use_file is not None else log_file
+        # =========================
+        # Resolve config
+        # =========================
 
-    # =========================
-    # Queue init
-    # =========================
+        level = level if level is not None else log_level
+        use_console = use_console if use_console is not None else log_console
+        use_file = use_file if use_file is not None else log_file
 
-    init_log_queue(use_multiprocessing)
-    queue = get_log_queue()
+        # =========================
+        # Queue init
+        # =========================
 
-    # =========================
-    # Formatters
-    # =========================
+        init_log_queue(use_multiprocessing)
+        queue = get_log_queue()
 
-    formatter = SimpleFormatter()
+        # =========================
+        # Formatters
+        # =========================
 
-    # =========================
-    # Handlers
-    # =========================
+        formatter = SimpleFormatter()
 
-    handlers: List[logging.Handler] = []
+        # =========================
+        # Handlers (consumer side)
+        # =========================
 
-    if use_console:
-        handlers.append(create_console_handler(formatter))
+        handlers: List[logging.Handler] = []
 
-    if use_file:
-        handlers.append(create_file_handler("app", formatter))
+        if use_console:
+            handlers.append(create_console_handler(formatter))
 
-    if extra_handlers:
-        handlers.extend(extra_handlers)
+        if use_file:
+            handlers.append(create_file_handler("app", formatter))
 
-    # =========================
-    # Listener
-    # =========================
+        if extra_handlers:
+            handlers.extend(extra_handlers)
 
-    start_listener(handlers)
-    atexit.register(stop_listener)
+        # =========================
+        # Listener
+        # =========================
 
-    # =========================
-    # Root logger
-    # =========================
+        start_listener(queue, handlers)
+        atexit.register(stop_listener)
 
-    root_logger = logging.getLogger()
+        # =========================
+        # Root logger (producer side)
+        # =========================
 
-    root_logger.handlers.clear()
-    root_logger.setLevel(level)
+        root_logger = logging.getLogger()
 
-    queue_handler = QueueHandler(queue)
-    root_logger.addHandler(queue_handler)
+        root_logger.handlers.clear()
+        root_logger.setLevel(level)
 
-    root_logger.propagate = False
+        queue_handler = QueueHandler(queue)
+        root_logger.addHandler(queue_handler)
 
-    _IsInitialized = True
+        _IsInitialized = True

@@ -4,11 +4,11 @@
 
 Diseñar e implementar un sistema de logging moderno, robusto y escalable que cumpla con estándares actuales de observabilidad, garantizando:
 
-* Seguridad en entornos concurrentes (multihilo y multiproceso)
-* Bajo impacto en performance
-* Estructuración consistente de logs
-* Facilidad de integración con sistemas externos
-* Compatibilidad total con el código legacy existente
+- Seguridad en entornos concurrentes (multihilo y multiproceso)
+- Bajo impacto en performance
+- Estructuración consistente de logs
+- Facilidad de integración con sistemas externos
+- Compatibilidad total con el código legacy existente
 
 El sistema debe evolucionar sin requerir cambios en los puntos actuales de uso (`get_logger(area, category)`).
 
@@ -20,9 +20,9 @@ El sistema de logging debe comportarse como una infraestructura desacoplada con 
 
 ### 2.1 Desacople total entre generación y escritura
 
-* Los logs NO deben escribirse directamente desde el código de negocio
-* Toda emisión de logs debe ser no bloqueante
-* La escritura debe centralizarse en un único punto de consumo
+- Los logs NO deben escribirse directamente desde el código de negocio
+- Toda emisión de logs debe ser no bloqueante
+- La escritura debe centralizarse en un único punto de consumo
 
 Arquitectura objetivo:
 
@@ -46,23 +46,23 @@ Arquitectura objetivo:
 
 El sistema debe:
 
-* Ser seguro en entornos multihilo (thread-safe)
-* Ser seguro en entornos multiproceso (process-safe)
+- Ser seguro en entornos multihilo (thread-safe)
+- Ser seguro en entornos multiproceso (process-safe)
 
 Debe evitar:
 
-* Corrupción de logs
-* Condiciones de carrera
-* Duplicación de handlers
-* Pérdida de mensajes
+- Corrupción de logs
+- Condiciones de carrera
+- Duplicación de handlers
+- Pérdida de mensajes
 
 ---
 
 ### 2.3 Configuración centralizada
 
-* Toda la configuración de logging debe inicializarse UNA sola vez
-* Los loggers individuales no deben gestionar handlers directamente
-* Debe existir un punto único de bootstrap del sistema
+- Toda la configuración de logging debe inicializarse UNA sola vez
+- Los loggers individuales no deben gestionar handlers directamente
+- Debe existir un punto único de bootstrap del sistema
 
 ---
 
@@ -88,9 +88,9 @@ Ejemplo:
 
 Esto permite:
 
-* Indexación
-* Búsqueda eficiente
-* Integración con herramientas externas
+- Indexación
+- Búsqueda eficiente
+- Integración con herramientas externas
 
 ---
 
@@ -98,29 +98,29 @@ Esto permite:
 
 El sistema debe permitir adjuntar contexto dinámico automáticamente:
 
-* request_id
-* trace_id
-* user_id
-* metadata relevante
+- request_id
+- trace_id
+- user_id
+- metadata relevante
 
 Sin necesidad de pasarlo manualmente en cada log.
 
 Debe soportar:
 
-* Ejecución async
-* Multithreading
+- Ejecución async
+- Multithreading
 
 Tecnología objetivo:
 
-* `contextvars`
+- `contextvars`
 
 ---
 
 ### 2.6 Performance y no bloqueo
 
-* El código de negocio nunca debe bloquear por operaciones de logging
-* El formateo y escritura deben ocurrir fuera del thread principal
-* El uso de IO debe estar completamente desacoplado
+- El código de negocio nunca debe bloquear por operaciones de logging
+- El formateo y escritura deben ocurrir fuera del thread principal
+- El uso de IO debe estar completamente desacoplado
 
 ---
 
@@ -128,22 +128,22 @@ Tecnología objetivo:
 
 El sistema debe soportar múltiples destinos de salida:
 
-* Consola (desarrollo)
-* Archivo (producción)
-* Sistemas externos (futuro)
+- Consola (desarrollo)
+- Archivo (producción)
+- Sistemas externos (futuro)
 
 Debe permitir:
 
-* Activación/desactivación por configuración
-* Selección de formato (plain text vs JSON)
+- Activación/desactivación por configuración
+- Selección de formato (plain text vs JSON)
 
 ---
 
 ### 2.8 Rotación y persistencia
 
-* Implementar rotación de logs (por tamaño o tiempo)
-* Definir políticas de retención
-* Evitar crecimiento ilimitado de archivos
+- Implementar rotación de logs (por tamaño o tiempo)
+- Definir políticas de retención
+- Evitar crecimiento ilimitado de archivos
 
 ---
 
@@ -151,10 +151,10 @@ Debe permitir:
 
 El sistema debe estar preparado para integrar:
 
-* ELK Stack (Elasticsearch, Logstash, Kibana)
-* Grafana Loki
-* Datadog
-* OpenTelemetry
+- ELK Stack (Elasticsearch, Logstash, Kibana)
+- Grafana Loki
+- Datadog
+- OpenTelemetry
 
 Sin requerir rediseños estructurales.
 
@@ -172,25 +172,25 @@ get_logger(area, category)
 
 Esto implica:
 
-* No cambiar la firma (parámetros, tipos, valor de retorno)
-* No requerir modificaciones en el código consumidor existente
-* No introducir efectos colaterales incompatibles con el comportamiento actual
+- No cambiar la firma (parámetros, tipos, valor de retorno)
+- No requerir modificaciones en el código consumidor existente
+- No introducir efectos colaterales incompatibles con el comportamiento actual
 
 Se permite:
 
-* Modificar completamente la implementación interna
-* Reemplazar la infraestructura subyacente (handlers, transporte, formateo, almacenamiento)
-* Mejorar performance, concurrencia y capacidades del sistema
+- Modificar completamente la implementación interna
+- Reemplazar la infraestructura subyacente (handlers, transporte, formateo, almacenamiento)
+- Mejorar performance, concurrencia y capacidades del sistema
 
 Extensiones:
 
-* Deben ser completamente backward-compatible o explícitamente opt-in
-* No deben alterar el comportamiento esperado por el código existente
+- Deben ser completamente backward-compatible o explícitamente opt-in
+- No deben alterar el comportamiento esperado por el código existente
 
 Evolución:
 
-* Debe permitirse la coexistencia entre comportamiento legacy y nuevas capacidades
-* No se deben introducir migraciones forzadas
+- Debe permitirse la coexistencia entre comportamiento legacy y nuevas capacidades
+- No se deben introducir migraciones forzadas
 
 ---
 
@@ -198,15 +198,15 @@ Evolución:
 
 Se considera parte del contrato:
 
-* La forma de invocación del logger (`get_logger`)
-* La disponibilidad y estabilidad del logger retornado
-* La semántica de niveles (`DEBUG`, `INFO`, etc.)
+- La forma de invocación del logger (`get_logger`)
+- La disponibilidad y estabilidad del logger retornado
+- La semántica de niveles (`DEBUG`, `INFO`, etc.)
 
 No se considera parte del contrato (puede evolucionar):
 
-* El formato exacto del log (texto vs JSON)
-* El destino de los logs (archivo, consola, sistemas externos)
-* La estructura interna del mensaje
+- El formato exacto del log (texto vs JSON)
+- El destino de los logs (archivo, consola, sistemas externos)
+- La estructura interna del mensaje
 
 Nota:
 
@@ -226,11 +226,11 @@ Formato plano:
 
 Problemas:
 
-* No estructurado → difícil de parsear
-* Dependencia de representación interna de objetos Python
-* Sin contexto enriquecido
-* Difícil integración con herramientas externas
-* Ambigüedad semántica
+- No estructurado → difícil de parsear
+- Dependencia de representación interna de objetos Python
+- Sin contexto enriquecido
+- Difícil integración con herramientas externas
+- Ambigüedad semántica
 
 ---
 
@@ -261,16 +261,16 @@ Ejemplo objetivo:
 
 Campos obligatorios:
 
-* `timestamp`
-* `level`
-* `logger`
-* `message`
+- `timestamp`
+- `level`
+- `logger`
+- `message`
 
 Campos opcionales:
 
-* `data`
-* `context`
-* `error`
+- `data`
+- `context`
+- `error`
 
 ---
 
@@ -291,9 +291,9 @@ Esto garantiza transición sin ruptura.
 
 ### 4.5 Lineamientos de diseño
 
-* `message` debe ser semántico
-* Los datos deben ir en `data`
-* Evitar serialización manual dentro del mensaje
+- `message` debe ser semántico
+- Los datos deben ir en `data`
+- Evitar serialización manual dentro del mensaje
 
 ---
 
@@ -301,17 +301,172 @@ Esto garantiza transición sin ruptura.
 
 El sistema será considerado correcto si:
 
-* No hay pérdida de logs bajo carga concurrente
-* No hay duplicación de mensajes
-* El overhead es mínimo
-* Los logs son fácilmente consumibles por herramientas externas
-* La API permanece intacta
+- No hay pérdida de logs bajo carga concurrente
+- No hay duplicación de mensajes
+- El overhead es mínimo
+- Los logs son fácilmente consumibles por herramientas externas
+- La API permanece intacta
 
 ---
 
 ## 6. Roadmap de Implementación
+### Fase 1 — Infraestructura concurrente (CRÍTICA)
 
-(Fases ya definidas — mantener como están, son correctas)
+**Objetivo:**
+Desacoplar completamente la generación de logs de su escritura (IO), garantizando seguridad en entornos multihilo y multiproceso.
+
+**Tareas:**
+
+* Implementar `QueueHandler` para todos los loggers
+* Implementar `QueueListener` centralizado
+* Crear una cola compartida (thread-safe / multiprocess-ready)
+* Redirigir todos los handlers actuales al listener
+
+**Reglas:**
+
+* `get_logger` no debe cambiar
+* Ningún logger debe escribir directamente a archivo o consola
+
+**Criterio de aceptación:**
+
+* No hay corrupción de logs en concurrencia
+* No hay duplicación de handlers
+* Mejora de performance bajo carga
+
+---
+
+### Fase 2 — Centralización de configuración
+
+**Objetivo:**
+Eliminar la configuración distribuida y consolidar la inicialización del sistema.
+
+**Tareas:**
+
+* Crear módulo de bootstrap (`logging.bootstrap`)
+* Centralizar:
+
+  * creación de handlers
+  * selección de formatters
+  * configuración (niveles, flags)
+
+**Reglas:**
+
+* La inicialización ocurre una sola vez
+* `get_logger` solo obtiene instancias, no configura
+
+**Criterio de aceptación:**
+
+* Ningún logger instancia handlers directamente
+* Toda la configuración está controlada desde un único punto
+
+---
+
+### Fase 3 — Context propagation (framework-agnostic)
+
+**Objetivo:**
+Incorporar contexto enriquecido sin acoplar el sistema a frameworks específicos.
+
+**Tareas:**
+
+* Implementar sistema basado en `contextvars`
+* Definir API interna:
+
+  * `set_context(...)`
+  * `get_context()`
+* Definir contexto base automático (process_id, thread_id, etc.)
+
+**Comportamiento:**
+
+* Sin contexto explícito → logs válidos con contexto mínimo
+* Con contexto → enriquecimiento automático
+
+**Integraciones opcionales:**
+
+* Middleware para FastAPI (u otros frameworks)
+
+**Criterio de aceptación:**
+
+* El sistema funciona sin dependencias externas
+* El contexto se agrega automáticamente cuando está disponible
+
+---
+
+### Fase 4 — Structured Logging (JSON)
+
+**Objetivo:**
+Migrar a un esquema estructurado manteniendo compatibilidad con logs existentes.
+
+**Tareas:**
+
+* Rediseñar `JsonFormatter`
+* Implementar lógica de compatibilidad:
+
+```
+if extra["data"] exists:
+    usar schema estructurado
+else:
+    fallback a formato legacy
+```
+
+* Definir y documentar schema estándar
+
+**Reglas:**
+
+* Nunca romper logs existentes
+* Siempre generar output válido
+
+**Criterio de aceptación:**
+
+* Logs nuevos cumplen el schema estructurado
+* Logs legacy siguen funcionando sin cambios
+
+---
+
+### Fase 5 — Migración progresiva del código
+
+**Objetivo:**
+Eliminar gradualmente logs no estructurados.
+
+**Tareas:**
+
+* Identificar puntos críticos del sistema
+* Migrar:
+
+```python
+logger.debug(obj)
+```
+
+a:
+
+```python
+logger.debug("Event description", extra={"data": {...}})
+```
+
+**Criterio de aceptación:**
+
+* Incremento progresivo de logs estructurados
+* Sin regresiones funcionales
+
+---
+
+### Fase 6 — Observabilidad e integración externa (opcional)
+
+**Objetivo:**
+Preparar el sistema para integrarse con herramientas externas.
+
+**Tareas:**
+
+* Validar compatibilidad del schema con:
+
+  * ELK / OpenSearch
+  * Grafana Loki
+  * Datadog
+* Ajustar campos si es necesario
+
+**Criterio de aceptación:**
+
+* Logs consumibles directamente por sistemas externos
+* No requiere transformaciones adicionales
 
 ---
 
@@ -324,15 +479,15 @@ Garantizar que el sistema de logging sea completamente independiente del framewo
 
 El sistema debe funcionar correctamente en:
 
-* Scripts standalone
-* Workers / procesos batch
-* Servicios HTTP (ej. FastAPI)
+- Scripts standalone
+- Workers / procesos batch
+- Servicios HTTP (ej. FastAPI)
 
 **Estrategia:**
 
-* Definir un **contexto base automático** (process_id, thread_id, etc.)
-* Incorporar contexto dinámico mediante `contextvars`
-* Mantener las integraciones con frameworks como **opcionales y desacopladas**
+- Definir un **contexto base automático** (process_id, thread_id, etc.)
+- Incorporar contexto dinámico mediante `contextvars`
+- Mantener las integraciones con frameworks como **opcionales y desacopladas**
 
 ---
 
@@ -343,15 +498,15 @@ Permitir adopción progresiva del sistema sin impacto disruptivo.
 
 **Lineamientos:**
 
-* El sistema se implementa como una **librería independiente**
-* La inicialización se realiza mediante un **bootstrap explícito**
-* El sistema debe ser **plug-and-play**
+- El sistema se implementa como una **librería independiente**
+- La inicialización se realiza mediante un **bootstrap explícito**
+- El sistema debe ser **plug-and-play**
 
 **Migración:**
 
-* Reemplazo progresivo del sistema legacy
-* Posibilidad de coexistencia temporal entre ambos sistemas
-* Sin requerir modificaciones profundas en el código consumidor
+- Reemplazo progresivo del sistema legacy
+- Posibilidad de coexistencia temporal entre ambos sistemas
+- Sin requerir modificaciones profundas en el código consumidor
 
 ---
 
@@ -415,10 +570,10 @@ Help me design or implement: [specific part]
 
 El objetivo es construir una infraestructura de logging con las siguientes propiedades:
 
-* **Escalable:** soporta carga y concurrencia real
-* **Confiable:** sin pérdida ni corrupción de logs
-* **Observable:** logs estructurados y consumibles externamente
-* **Desacoplada:** independiente del código de negocio y frameworks
-* **Compatible:** mantiene el contrato legacy sin ruptura
+- **Escalable:** soporta carga y concurrencia real
+- **Confiable:** sin pérdida ni corrupción de logs
+- **Observable:** logs estructurados y consumibles externamente
+- **Desacoplada:** independiente del código de negocio y frameworks
+- **Compatible:** mantiene el contrato legacy sin ruptura
 
 Esto posiciona el sistema de logging como un componente de infraestructura crítico, alineado con estándares modernos de sistemas en producción.
